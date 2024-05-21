@@ -1,0 +1,23 @@
+@startuml
+title Webhook Notifier
+autonumber
+
+participant WebhookConsumer as consumer
+queue Kafka as kafka
+database Database as db
+participant Temporal as temporal
+participant Partner as partner
+
+group Consume subscriber_event
+consumer -> kafka: consume subscriber events
+consumer -> db: enrich webhook registration
+note right: partner_url,\nregistered_events
+consumer -> temporal: execute workflow notifying event to partner
+consumer -> kafka: ack message
+end
+
+group notify subscriber_event to partner
+temporal -> partner: notify event to partner
+end
+
+@enduml

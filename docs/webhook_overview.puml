@@ -1,0 +1,28 @@
+@startuml
+autonumber
+
+actor Subscriber as subscriber
+participant Partner as partner
+participant Flodesk as flodesk
+database DB as db
+queue Queue as queue
+
+group Register Webhook
+partner -> flodesk: Register webhook
+note right: events, webhook_url,...
+flodesk -> db: store partner webhook information
+end
+
+group Producing subscriber event
+subscriber -> flodesk: interact with segment
+flodesk -> queue: produce to topic subscriber_event
+note right: events:\n subscriber.added_to_segment\n subscriber.created\n subscriber.unsubscribed
+end
+
+group Webhook Notifier
+flodesk -> queue: Consume messages from topic subscriber_event
+flodesk -> partner: Notify subscriber events
+end
+
+
+@enduml
