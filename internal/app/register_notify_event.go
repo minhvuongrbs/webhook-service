@@ -3,6 +3,8 @@ package app
 import (
 	"context"
 	"fmt"
+
+	"github.com/minhvuongrbs/webhook-service/internal/entities/event"
 )
 
 type RegisterNotifyEventHandler struct {
@@ -10,15 +12,19 @@ type RegisterNotifyEventHandler struct {
 }
 
 type temporalAdapter interface {
-	TriggerNotifyWebhookEvent(ctx context.Context) error
+	RegisterWorkflowNotifyEvent(ctx context.Context, e event.SubscriberEvent) error
 }
 
 func NewRegisterNotifyEventHandler(temporalAdapter temporalAdapter) RegisterNotifyEventHandler {
 	return RegisterNotifyEventHandler{temporalAdapter: temporalAdapter}
 }
 
-func (h RegisterNotifyEventHandler) Execute(ctx context.Context) error {
-	err := h.temporalAdapter.TriggerNotifyWebhookEvent(ctx)
+const (
+	WorkflowNotifyEvent = "NotifyEventToPartner"
+)
+
+func (h RegisterNotifyEventHandler) Execute(ctx context.Context, e event.SubscriberEvent) error {
+	err := h.temporalAdapter.RegisterWorkflowNotifyEvent(ctx, e)
 	if err != nil {
 		return fmt.Errorf("temporal adapter failed to trigger notify webhook: %w", err)
 	}

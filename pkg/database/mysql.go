@@ -18,7 +18,7 @@ type Config struct {
 	ConnMaxLifeTime      time.Duration `json:"conn_max_life_time" mapstructure:"conn_max_life_time"`
 }
 
-func mysqlDSN(conf *Config) string {
+func mysqlDSN(conf Config) string {
 	mysqlConf := mysql.Config{
 		User:                 conf.User,
 		Passwd:               conf.Passwd,
@@ -33,7 +33,7 @@ func mysqlDSN(conf *Config) string {
 	return mysqlConf.FormatDSN()
 }
 
-func NewMysqlDatabaseConn(conf *Config) (*sql.DB, error) {
+func NewMysqlDatabaseConn(conf Config) (*sql.DB, error) {
 	db, err := sql.Open("mysql", mysqlDSN(conf))
 	if err != nil {
 		return nil, err

@@ -12,21 +12,22 @@ func AppCommandLineInterface() *cli.App {
 			Name:        "config",
 			Aliases:     []string{"c"},
 			DefaultText: "./config/local.yaml",
+			Value:       "./config/local.yaml",
 			Usage:       "Load configuration from `FILE`",
 			Required:    false,
 		},
 	}
 	appCli.Commands = []*cli.Command{
-		//{
-		//	Name:   "worker",
-		//	Usage:  "run temporal worker",
-		//	Action: WorkerRun,
-		//	Flags:  []cli.Flag{},
-		//},
+		{
+			Name:   "temporal_worker",
+			Usage:  "run temporal worker",
+			Action: StartTemporalWorkerApp,
+			Flags:  []cli.Flag{},
+		},
 		{
 			Name:   "kafka_consumer",
 			Usage:  "run kafka consumer",
-			Action: kafkaConsumerCommand,
+			Action: StartKafkaConsumerCommand,
 			Flags:  []cli.Flag{},
 		},
 	}

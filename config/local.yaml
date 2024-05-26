@@ -7,20 +7,12 @@ logger:
   encoding: json
   disable_stacktrace: true
 
-grpc:
-  host: 0.0.0.0
-  port: 9090
-
-http:
-  host: 0.0.0.0
-  port: 8080
-
 database:
-  address: 0.0.0.0:3306
+  address: 0.0.0.0:3308
   user: app_user
   passwd: pwd123
   allow_native_passwords: true
-  database_name: financial_service
+  database_name: webhook
   max_open_conn: 10
   max_idle_conn: 5
   conn_max_life_time: 10m
@@ -29,3 +21,28 @@ redis_connection:
   addr: 0.0.0.0:6379
   db: 0
   pool_size: 10
+
+kafka_subscriber_event:
+#  brokers: 0.0.0.0:29091,0.0.0.0:29092,0.0.0.0:29093
+  brokers: 0.0.0.0:9092
+  topic: "flodesk.account.subscriber_event"
+  auto_commit: true
+  client_id: "flodesk.webhook"
+  consumer_group: "flodesk.webhook.subscriber_event.notify_event"
+
+dead_letter_producer:
+#  brokers: 0.0.0.0:29091,0.0.0.0:29092,0.0.0.0:29093
+  brokers: 0.0.0.0:9092
+  topic: "flodesk.dead_letter"
+  client_id: "flodesk"
+
+temporal:
+  host: localhost:7233
+  namespace: flodesk
+  task_queue: webhook
+  enable_tls: false
+  enable_encoder: true
+  enable_compress: true
+
+http_client:
+  timeout: 30s

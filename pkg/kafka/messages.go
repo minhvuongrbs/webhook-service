@@ -12,11 +12,6 @@ const (
 	CreatedAtKey     = "created_at"
 	AttemptTimesKey  = "attempt_times"
 	OrderingKey      = "ordering_key"
-
-	FinUUIDHeaderKey   = "fin_uuid"
-	FinCreatedAtKey    = "fin_created_at"
-	FinExecutedAtKey   = "fin_executed_at"
-	FinAttemptTimesKey = "fin_attempt_times"
 )
 
 type Metadata map[string]string
@@ -153,11 +148,11 @@ func Unmarshal(kafkaMsg *sarama.ConsumerMessage) *ConsumerMessage {
 
 	for _, header := range kafkaMsg.Headers {
 		switch string(header.Key) {
-		case TraceIDHeaderKey, FinUUIDHeaderKey:
+		case TraceIDHeaderKey:
 			traceID = string(header.Value)
-		case CreatedAtKey, FinCreatedAtKey:
+		case CreatedAtKey:
 			createdAt = cast.ToInt64(string(header.Value))
-		case AttemptTimesKey, FinAttemptTimesKey:
+		case AttemptTimesKey:
 			attemptTimes = cast.ToInt(string(header.Value))
 		case OrderingKey:
 			orderingKey = string(header.Value)
@@ -246,18 +241,6 @@ func Marshal(m *ProducerMessage) *sarama.ProducerMessage {
 		{
 			Key:   []byte(OrderingKey),
 			Value: []byte(m.OrderingKey),
-		},
-		{
-			Key:   []byte(FinUUIDHeaderKey),
-			Value: []byte(m.TraceID),
-		},
-		{
-			Key:   []byte(FinCreatedAtKey),
-			Value: []byte(fmt.Sprintf("%d", m.CreatedAt)),
-		},
-		{
-			Key:   []byte(FinAttemptTimesKey),
-			Value: []byte(fmt.Sprintf("%d", m.AttemptTimes)),
 		},
 	}
 

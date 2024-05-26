@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/minhvuongrbs/webhook-service/internal/entities/event"
@@ -14,11 +15,11 @@ type NotifyEventHandler struct {
 }
 
 type partnerAdapter interface {
-	NotifyWebhookEvent(ctx context.Context, subscriberEvent event.SubscriberEvent) error
+	NotifyWebhookEvent(ctx context.Context, w *webhook.Webhook, subscriberEvent event.SubscriberEvent) error
 }
 
 type webhookRepository interface {
-	GetWebhookById(ctx context.Context, webhookId int64) (*webhook.Webhook, error)
+	GetWebhookById(ctx context.Context, webhookId string) (*webhook.Webhook, error)
 }
 
 func NewNotifyEventHandler(webhookRepository webhookRepository, partnerAdapter partnerAdapter) NotifyEventHandler {
@@ -29,11 +30,14 @@ func NewNotifyEventHandler(webhookRepository webhookRepository, partnerAdapter p
 }
 
 func (h NotifyEventHandler) Execute(ctx context.Context, e event.SubscriberEvent) error {
-	_, err := h.webhookRepository.GetWebhookById(ctx, e.WebhookId)
-	if err != nil {
-		return err
+	w, err := h.webhookRepository.GetWebhookById(ctx, e.WebhookId)
+	if errors.Is(err, webhook.ErrRepositoryNotFound) {
+		return webhook.ErrRepositoryNotFound // should return error and skip retry
 	}
-	err = h.partnerAdapter.NotifyWebhookEvent(ctx, e)
+	if err != nil {
+		return fmt.Errorf("get event webhook: %w", err)
+	}
+	err = h.partnerAdapter.NotifyWebhookEvent(ctx, w, e)
 	if err != nil {
 		return fmt.Errorf("partner notify event failed: %w", err)
 	}

@@ -8,14 +8,14 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/minhvuongrbs/webhook-service/cmd/consumer"
+	"github.com/minhvuongrbs/webhook-service/cmd/kafkaconsumer"
 	"github.com/minhvuongrbs/webhook-service/config"
 	"github.com/minhvuongrbs/webhook-service/pkg/logging"
 	"github.com/urfave/cli/v2"
 	"go.uber.org/zap"
 )
 
-func kafkaConsumerCommand(cmdCLI *cli.Context) error {
+func StartKafkaConsumerCommand(cmdCLI *cli.Context) error {
 	confPath := cmdCLI.String("config")
 	conf, err := config.LoadConfig(confPath)
 	if err != nil {
@@ -26,15 +26,15 @@ func kafkaConsumerCommand(cmdCLI *cli.Context) error {
 		return err
 	}
 	l := zap.S()
-	l.Infow("start kafka consumer", "config", conf)
 
+	l.Infow("start kafka consumer", "config", conf)
 	app, err := NewKafkaConsumeApp(conf)
 	if err != nil {
 		l.Errorw("cannot create kafka consumer app", "error", err)
 		return err
 	}
 	ctx := context.Background()
-	if err := app.StartConsume(ctx); err != nil {
+	if err = app.StartConsume(ctx); err != nil {
 		l.Errorw("cannot start kafka consumer", "error", err)
 		return err
 	}
@@ -42,7 +42,11 @@ func kafkaConsumerCommand(cmdCLI *cli.Context) error {
 }
 
 func NewKafkaConsumeApp(conf config.Config) (*KafkaConsumeApp, error) {
-	kafkaConsumers := []*consumer.KafkaConsumer{}
+	eventConsumer, err := kafkaconsumer.NewSubscriberEventConsumer(conf)
+	if err != nil {
+		return nil, fmt.Errorf("cannot create kafka consumer event consumer: %w", err)
+	}
+	kafkaConsumers := []*kafkaconsumer.KafkaConsumer{eventConsumer}
 	return &KafkaConsumeApp{
 		wg:        &sync.WaitGroup{},
 		consumers: kafkaConsumers,
@@ -52,14 +56,13 @@ func NewKafkaConsumeApp(conf config.Config) (*KafkaConsumeApp, error) {
 type KafkaConsumeApp struct {
 	wg *sync.WaitGroup
 
-	consumers []*consumer.KafkaConsumer
+	consumers []*kafkaconsumer.KafkaConsumer
 }
 
 func (k *KafkaConsumeApp) StartConsume(ctx context.Context) error {
-
 	errChannel := make(chan error)
 	for _, c := range k.consumers {
-		go func(c2 *consumer.KafkaConsumer) {
+		go func(c2 *kafkaconsumer.KafkaConsumer) {
 			k.wg.Add(1)
 			defer k.wg.Done()
 			err := c2.Consume(context.Background())

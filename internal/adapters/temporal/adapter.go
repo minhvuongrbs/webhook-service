@@ -1,18 +1,38 @@
 package temporal
 
-import "context"
+import (
+	"context"
+	"fmt"
+
+	"github.com/minhvuongrbs/webhook-service/internal/app"
+	"github.com/minhvuongrbs/webhook-service/internal/entities/event"
+	"github.com/minhvuongrbs/webhook-service/pkg/logging"
+	"go.temporal.io/api/enums/v1"
+	"go.temporal.io/sdk/client"
+)
 
 type Adapter struct {
-	temporalClient temporalClient
+	temporalClient client.Client
+	taskQueue      string
 }
 
-type temporalClient interface {
+func NewAdapter(temporalClient client.Client, taskQueue string) Adapter {
+	return Adapter{temporalClient: temporalClient, taskQueue: taskQueue}
 }
 
-func NewAdapter(temporalClient temporalClient) Adapter {
-	return Adapter{temporalClient: temporalClient}
-}
+func (a Adapter) RegisterWorkflowNotifyEvent(ctx context.Context, e event.SubscriberEvent) error {
+	workflowID := fmt.Sprintf("webhook.notify_event:%s.%s", e.EventName, e.WebhookId)
 
-func (a Adapter) TriggerNotifyWebhookEvent(ctx context.Context) error {
+	wlOpts := client.StartWorkflowOptions{
+		ID:                    workflowID,
+		TaskQueue:             a.taskQueue,
+		WorkflowIDReusePolicy: enums.WORKFLOW_ID_REUSE_POLICY_TERMINATE_IF_RUNNING,
+	}
+
+	wlExec, err := a.temporalClient.ExecuteWorkflow(ctx, wlOpts, app.WorkflowNotifyEvent, e)
+	if err != nil {
+		return fmt.Errorf("failed to execute workflow: %w", err)
+	}
+	logging.FromContext(ctx).Infow("execute workflow %s using runId %s", wlExec.GetID(), wlExec.GetRunID())
 	return nil
 }
