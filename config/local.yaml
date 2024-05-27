@@ -13,8 +13,8 @@ database:
   passwd: pwd123
   allow_native_passwords: true
   database_name: webhook
-  max_open_conn: 10
-  max_idle_conn: 5
+  max_open_conn: 30
+  max_idle_conn: 1
   conn_max_life_time: 10m
 
 redis_connection:

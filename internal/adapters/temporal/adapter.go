@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/minhvuongrbs/webhook-service/internal/app"
-	"github.com/minhvuongrbs/webhook-service/internal/entities/event"
+	"github.com/minhvuongrbs/webhook-service/internal/entities/subscriber"
 	"github.com/minhvuongrbs/webhook-service/pkg/logging"
 	"go.temporal.io/api/enums/v1"
 	"go.temporal.io/sdk/client"
@@ -20,7 +20,7 @@ func NewAdapter(temporalClient client.Client, taskQueue string) Adapter {
 	return Adapter{temporalClient: temporalClient, taskQueue: taskQueue}
 }
 
-func (a Adapter) RegisterWorkflowNotifyEvent(ctx context.Context, e event.SubscriberEvent) error {
+func (a Adapter) RegisterWorkflowNotifyEvent(ctx context.Context, e subscriber.Event) error {
 	workflowID := fmt.Sprintf("webhook.notify_event:%s.%s", e.EventName, e.WebhookId)
 
 	wlOpts := client.StartWorkflowOptions{

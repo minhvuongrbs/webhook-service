@@ -25,8 +25,7 @@ func StartTemporalWorkerApp(cmdCLI *cli.Context) error {
 	}
 	_ = zap.S()
 
-	const webhookTaskQueue = "webhook-task-queue"
-	temporalWorker, err := temporal.NewTemporalWorker(conf.Temporal, webhookTaskQueue)
+	temporalWorker, err := temporal.NewTemporalWorker(conf.Temporal, conf.Temporal.TaskQueue)
 	if err != nil {
 		return fmt.Errorf("init temporal worker got error: %w", err)
 	}

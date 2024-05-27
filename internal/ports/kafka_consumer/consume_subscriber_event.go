@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/minhvuongrbs/webhook-service/internal/app"
-	"github.com/minhvuongrbs/webhook-service/internal/entities/event"
+	"github.com/minhvuongrbs/webhook-service/internal/entities/subscriber"
 	"github.com/minhvuongrbs/webhook-service/pkg/kafka"
 	"github.com/minhvuongrbs/webhook-service/pkg/logging"
 )
@@ -33,11 +33,11 @@ func (c ConsumeSubscriberEvent) Handle(ctx context.Context, message *kafka.Consu
 	//l = l.With("event_trace_id", evt.TraceID)
 
 	switch evt.EventName {
-	case event.SubscriberCreated:
+	case subscriber.EventCreated:
 		fallthrough
-	case event.SubscriberSubscribed:
+	case subscriber.EventSubscribed:
 		fallthrough
-	case event.SubscriberUnsubscribed:
+	case subscriber.EventUnsubscribed:
 		err = c.App.RegisterNotifyEventHandler.Execute(ctx, evt)
 		if err != nil {
 			return fmt.Errorf("failed to register notify event handler: %w", err)
@@ -48,10 +48,10 @@ func (c ConsumeSubscriberEvent) Handle(ctx context.Context, message *kafka.Consu
 	}
 }
 
-func fromKafkaMessage2SubscriberEvent(message *kafka.ConsumerMessage) (event.SubscriberEvent, error) {
-	evt := event.SubscriberEvent{}
+func fromKafkaMessage2SubscriberEvent(message *kafka.ConsumerMessage) (subscriber.Event, error) {
+	evt := subscriber.Event{}
 	if err := json.Unmarshal(message.Payload, &evt); err != nil {
-		return event.SubscriberEvent{}, fmt.Errorf("json unmarshal subscriber event got error: %w", err)
+		return subscriber.Event{}, fmt.Errorf("json unmarshal subscriber event got error: %w", err)
 	}
 	return evt, nil
 }

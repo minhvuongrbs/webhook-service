@@ -9,7 +9,6 @@ import (
 	"github.com/minhvuongrbs/webhook-service/internal/adapters/repository/webhook"
 	"github.com/minhvuongrbs/webhook-service/internal/adapters/temporal"
 	"github.com/minhvuongrbs/webhook-service/internal/app"
-	"github.com/minhvuongrbs/webhook-service/internal/common/httpclient"
 	"github.com/minhvuongrbs/webhook-service/pkg/database"
 	pkgtemporal "github.com/minhvuongrbs/webhook-service/pkg/temporal"
 )
@@ -21,8 +20,11 @@ func NewApplication(conf config.Config) (app.App, error) {
 	}
 	webhookRepo := webhook.NewWebhookRepository(db)
 
-	httpClientTP := httpclient.NewRoundTripper()
-	httpClient := http.Client{Timeout: conf.HttpClient.Timeout, Transport: httpClientTP}
+	// todo: using round tripper
+	// it's somehow cause http post request error
+	//httpClientTP := httpclient.NewRoundTripper()
+	//httpClient := http.Client{Timeout: conf.HttpClient.Timeout, Transport: httpClientTP}
+	httpClient := http.Client{Timeout: conf.HttpClient.Timeout}
 
 	partnerAdapter := partner.NewAdapter(httpClient)
 	temporalClient, err := pkgtemporal.NewTemporalClient(conf.Temporal)

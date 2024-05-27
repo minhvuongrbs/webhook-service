@@ -1,22 +1,6 @@
-package event
+package subscriber
 
 import "time"
-
-type SubscriberEventName string
-
-const (
-	SubscriberCreated      = SubscriberEventName("subscriber.created")
-	SubscriberSubscribed   = SubscriberEventName("subscriber.subscribed")
-	SubscriberUnsubscribed = SubscriberEventName("subscriber.unsubscribed")
-)
-
-type SubscriberEvent struct {
-	EventName  SubscriberEventName `json:"event_name"`
-	EventTime  time.Time           `json:"event_time"`
-	Subscriber Subscriber          `json:"subscriber"`
-	Segment    Segment             `json:"segment"`
-	WebhookId  string              `json:"webhook_id"`
-}
 
 type Subscriber struct {
 	Id           string    `json:"id"`

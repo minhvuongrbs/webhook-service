@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/minhvuongrbs/webhook-service/internal/app"
-	"github.com/minhvuongrbs/webhook-service/internal/entities/event"
+	"github.com/minhvuongrbs/webhook-service/internal/entities/subscriber"
 	"github.com/minhvuongrbs/webhook-service/internal/entities/webhook"
 	"github.com/minhvuongrbs/webhook-service/pkg/logging"
 	"go.temporal.io/sdk/activity"
@@ -16,8 +16,6 @@ import (
 	"go.temporal.io/sdk/workflow"
 	"go.uber.org/zap"
 )
-
-// define temporal workflow to notify event with retry policy
 
 var (
 	activityNotifyEventToPartner = "activityNotifyEventToPartner"
@@ -46,7 +44,7 @@ func (t *NotifyEventToPartner) Register(temporalWorker worker.Worker) {
 	// Register another workflow here ...
 }
 
-func (t *NotifyEventToPartner) Workflow(ctx workflow.Context, e event.SubscriberEvent) error {
+func (t *NotifyEventToPartner) Workflow(ctx workflow.Context, e subscriber.Event) error {
 	logger := zap.S().With("webhook_id", e.WebhookId)
 	logger.Info("Workflow NotifyEventToPartner started")
 
@@ -66,7 +64,7 @@ func (t *NotifyEventToPartner) Workflow(ctx workflow.Context, e event.Subscriber
 	return nil
 }
 
-func (t *NotifyEventToPartner) Activity(ctx context.Context, e event.SubscriberEvent) error {
+func (t *NotifyEventToPartner) Activity(ctx context.Context, e subscriber.Event) error {
 	logger := zap.S().
 		Named("notifyEventToPartnerActivity").
 		With("webhook_id", e.WebhookId)

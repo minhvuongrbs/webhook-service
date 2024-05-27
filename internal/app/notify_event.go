@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/minhvuongrbs/webhook-service/internal/entities/event"
+	"github.com/minhvuongrbs/webhook-service/internal/entities/subscriber"
 	"github.com/minhvuongrbs/webhook-service/internal/entities/webhook"
 )
 
@@ -15,7 +15,7 @@ type NotifyEventHandler struct {
 }
 
 type partnerAdapter interface {
-	NotifyWebhookEvent(ctx context.Context, w *webhook.Webhook, subscriberEvent event.SubscriberEvent) error
+	NotifyWebhookEvent(ctx context.Context, w *webhook.Webhook, subscriberEvent subscriber.Event) error
 }
 
 type webhookRepository interface {
@@ -29,7 +29,7 @@ func NewNotifyEventHandler(webhookRepository webhookRepository, partnerAdapter p
 	}
 }
 
-func (h NotifyEventHandler) Execute(ctx context.Context, e event.SubscriberEvent) error {
+func (h NotifyEventHandler) Execute(ctx context.Context, e subscriber.Event) error {
 	w, err := h.webhookRepository.GetWebhookById(ctx, e.WebhookId)
 	if errors.Is(err, webhook.ErrRepositoryNotFound) {
 		return webhook.ErrRepositoryNotFound // should return error and skip retry

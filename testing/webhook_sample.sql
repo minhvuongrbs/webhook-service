@@ -1,0 +1,1 @@
+insert into webhook.webhook (id, status, partner_id, metadata, created_at, updated_at) values ('cp9irs04uq1tockiom9g', 'active', 'cpaa1fg4uq1ne39r9p20', '{"name": "webhook name1", "events": ["subscriber.created", "subscriber.subscribed"], "post_url": "https://webhook.site/9e15250a-d7fb-4aef-a19a-0476c74ce913"}', '2024-05-27 15:04:36', '2024-05-27 15:04:36');

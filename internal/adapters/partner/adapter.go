@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/minhvuongrbs/webhook-service/internal/entities/event"
+	"github.com/minhvuongrbs/webhook-service/internal/entities/subscriber"
 	"github.com/minhvuongrbs/webhook-service/internal/entities/webhook"
 )
 
@@ -25,15 +25,19 @@ const (
 	contentTypeJSON = "application/json"
 )
 
-func (a Adapter) NotifyWebhookEvent(ctx context.Context, w *webhook.Webhook, event event.SubscriberEvent) error {
+func (a Adapter) NotifyWebhookEvent(ctx context.Context, w *webhook.Webhook, event subscriber.Event) error {
 	jsonBody, err := json.Marshal(event)
 	if err != nil {
 		return fmt.Errorf("could not marshal webhook event: %w", err)
 	}
 	resp, err := a.httpClient.Post(w.GetPostUrl(), contentTypeJSON, bytes.NewBuffer(jsonBody))
 	if err != nil {
-		return fmt.Errorf("could not send webhook event: %w", err)
+		return fmt.Errorf("could not create HTTP request: %w", err)
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("received non-OK response: %s", resp.Status)
+	}
 	return nil
 }

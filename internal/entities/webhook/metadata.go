@@ -12,7 +12,7 @@ const (
 /* Example:
 {
   "name": "webhook name1",
-  "post_url": "google.com",
+  "post_url": "https://webhook.site/9e15250a-d7fb-4aef-a19a-0476c74ce913",
   "events": ["subscriber.created","subscriber.subscribed"]
 }
 */
