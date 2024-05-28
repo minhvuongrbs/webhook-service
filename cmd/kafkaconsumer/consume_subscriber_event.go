@@ -7,7 +7,6 @@ import (
 	"github.com/minhvuongrbs/webhook-service/internal/ports/kafka_consumer"
 	"github.com/minhvuongrbs/webhook-service/internal/service"
 	"github.com/minhvuongrbs/webhook-service/pkg/pubsub"
-	"github.com/minhvuongrbs/webhook-service/pkg/temporal"
 )
 
 const (
@@ -15,10 +14,6 @@ const (
 )
 
 func NewSubscriberEventConsumer(conf config.Config) (*KafkaConsumer, error) {
-	_, err := temporal.NewTemporalClient(conf.Temporal)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create temporal client: %w", err)
-	}
 	kafkaSubscribeCfg := pubsub.KafkaSubscriberConfig{
 		SubscribeConfig:          conf.KafkaSubscriberEvent,
 		DeadLetterProducerConfig: conf.DeadLetterProducer,
