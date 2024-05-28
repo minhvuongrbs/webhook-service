@@ -1,4 +1,4 @@
-package temporal_worker
+package temporal_workflow
 
 import (
 	"context"
@@ -25,7 +25,7 @@ type NotifyEventToPartner struct {
 	app app.App
 }
 
-func NewNotifyEventToPartnerWorker(app app.App) (NotifyEventToPartner, error) {
+func NewWorkflowNotifyEventToPartner(app app.App) (NotifyEventToPartner, error) {
 	return NotifyEventToPartner{
 		app: app,
 	}, nil
@@ -33,20 +33,20 @@ func NewNotifyEventToPartnerWorker(app app.App) (NotifyEventToPartner, error) {
 
 func (t *NotifyEventToPartner) Register(temporalWorker worker.Worker) {
 	temporalWorker.RegisterWorkflowWithOptions(
-		t.Workflow,
+		t.workflow,
 		workflow.RegisterOptions{Name: app.WorkflowNotifyEvent},
 	)
 	temporalWorker.RegisterActivityWithOptions(
-		t.Activity,
+		t.activity,
 		activity.RegisterOptions{Name: activityNotifyEventToPartner},
 	)
 
-	// Register another workflow here ...
+	// Register other activities here ...
 }
 
-func (t *NotifyEventToPartner) Workflow(ctx workflow.Context, e subscriber.Event) error {
+func (t *NotifyEventToPartner) workflow(ctx workflow.Context, e subscriber.Event) error {
 	logger := zap.S().With("webhook_id", e.WebhookId)
-	logger.Info("Workflow NotifyEventToPartner started")
+	logger.Info("workflow NotifyEventToPartner started")
 
 	ctxActivity := workflow.WithActivityOptions(ctx, workflow.ActivityOptions{
 		StartToCloseTimeout: time.Second * 35,
@@ -64,7 +64,7 @@ func (t *NotifyEventToPartner) Workflow(ctx workflow.Context, e subscriber.Event
 	return nil
 }
 
-func (t *NotifyEventToPartner) Activity(ctx context.Context, e subscriber.Event) error {
+func (t *NotifyEventToPartner) activity(ctx context.Context, e subscriber.Event) error {
 	logger := zap.S().
 		Named("notifyEventToPartnerActivity").
 		With("webhook_id", e.WebhookId)

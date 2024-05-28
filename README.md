@@ -4,6 +4,12 @@ Handling webhook and notify to partner the corresponding events
 ## Documentation
 Finding documentation in folder: ./docs
 
+## Technical Stack
+Programming Language: Golang\
+Database: MySQL\
+Message Broker: Kafka\
+[Temporal](https://temporal.io) for handling retryable activities
+
 ## Project structure
 ```
 ┣ cmd: init system with cli

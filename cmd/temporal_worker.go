@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/minhvuongrbs/webhook-service/config"
-	"github.com/minhvuongrbs/webhook-service/internal/ports/temporal_worker"
+	"github.com/minhvuongrbs/webhook-service/internal/ports/temporal_workflow"
 	"github.com/minhvuongrbs/webhook-service/internal/service"
 	"github.com/minhvuongrbs/webhook-service/pkg/logging"
 	"github.com/minhvuongrbs/webhook-service/pkg/temporal"
@@ -34,7 +34,7 @@ func StartTemporalWorkerApp(cmdCLI *cli.Context) error {
 	if err != nil {
 		return fmt.Errorf("create temporal client application got error: %w", err)
 	}
-	workerNotifyEventToPartner, err := temporal_worker.NewNotifyEventToPartnerWorker(app)
+	workerNotifyEventToPartner, err := temporal_workflow.NewWorkflowNotifyEventToPartner(app)
 	if err != nil {
 		return fmt.Errorf("init worker sync lfvn contract got error: %w", err)
 	}

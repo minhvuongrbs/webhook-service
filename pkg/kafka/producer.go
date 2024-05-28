@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/IBM/sarama"
-	"github.com/dnwe/otelsarama"
 	"github.com/pkg/errors"
 )
 
@@ -93,26 +92,6 @@ func WithProducerInterceptorOption(opts ...ProducerInterceptor) ProducerOption {
 type Producer interface {
 	Publish(message *ProducerMessage) (partition int32, offset int64, err error)
 	Close() error
-}
-
-func NewKafkaProducer(conf *ProducerConfig, opts ...ProducerOption) (Producer, error) {
-	saramaConf := DefaultSaramaProducerConfig()
-	producerOpts := LoadProducerOptions(opts...)
-	for _, o := range producerOpts.configOptions {
-		o(saramaConf)
-	}
-
-	producer, err := sarama.NewSyncProducer(conf.Brokers, saramaConf)
-	if err != nil {
-		return nil, errors.Wrap(err, "cannot create Kafka producer")
-	}
-
-	syncProducer := &SyncProducer{
-		config:       conf,
-		SyncProducer: otelsarama.WrapSyncProducer(saramaConf, producer),
-	}
-
-	return NewProducerWithHandlerInterceptor(syncProducer, producerOpts.handlerInterceptor...), nil
 }
 
 type SyncProducer struct {

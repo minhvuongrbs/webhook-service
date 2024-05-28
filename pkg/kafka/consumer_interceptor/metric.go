@@ -12,7 +12,6 @@ import (
 )
 
 var (
-	//DefaultHistogramBuckets = []float64{0.002, 0.005, 0.01, 0.05, 0.1, 0.2, 0.3, 0.5, 1, 2, 5, 7, 10}
 	DefaultHistogramBuckets = []float64{.005, .01, .025, .05, .1, .15, .25, .5, 1, 1.3, 1.5, 1.8, 2, 2.3, 2.5, 2.8, 3, 3.2, 3.5, 3.8, 4, 4.5,
 		5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10}
 )
@@ -46,47 +45,6 @@ func init() {
 
 type ErrWithStatus interface {
 	Status() string
-}
-
-func MetricsHandler() kafka.ConsumeHandlerInterceptor {
-	return func(handler kafka.ConsumeMessageHandler) kafka.ConsumeMessageHandler {
-		return func(m *kafka.ConsumerMessage) error {
-			tstart := time.Now()
-			var err error
-			lagConsumeLatencyMetricVec.WithLabelValues(
-				m.GetTopic(),
-				fmt.Sprintf("%d", m.GetPartition()),
-			).Observe(time.Since(time.UnixMilli(m.GetCreatedAt())).Seconds()) //nolint
-
-			defer func() {
-				status := "OK"
-				if err != nil {
-					status = "ERROR"
-					if es, ok := err.(ErrWithStatus); ok {
-						status = es.Status()
-					}
-				}
-				if r := recover(); r != nil {
-					status = "PANIC"
-					consumerHandleLatencyMetricVec.WithLabelValues(
-						m.GetTopic(),
-						fmt.Sprintf("%d", m.GetPartition()),
-						status,
-					).Observe(time.Since(tstart).Seconds())
-					panic(r)
-				} else {
-					consumerHandleLatencyMetricVec.WithLabelValues(
-						m.GetTopic(),
-						fmt.Sprintf("%d", m.GetPartition()),
-						status,
-					).Observe(time.Since(tstart).Seconds())
-				}
-			}()
-
-			err = handler(m)
-			return err
-		}
-	}
 }
 
 type FromErrorToStatusFunc func(err error) string

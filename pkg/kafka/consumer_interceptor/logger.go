@@ -10,32 +10,6 @@ import (
 	"go.uber.org/zap"
 )
 
-func LoggerHandler(l *zap.SugaredLogger) kafka.ConsumeHandlerInterceptor {
-	return func(handler kafka.ConsumeMessageHandler) kafka.ConsumeMessageHandler {
-		return func(m *kafka.ConsumerMessage) error {
-			ll := l.With("partition", m.GetPartition(), "offset", m.GetOffset(),
-				"created_at", m.GetCreatedAt(), "order_key", m.GetOrderingKey(), "trace_id",
-				m.GetTraceID(), "topic", m.GetTopic(), "attempt_times", m.GetAttemptTimes())
-
-			ll.Infow("Consume message")
-			defer func() {
-				if r := recover(); r != nil {
-					ll.Errorw("Consume message got panic", "stack_trace", debug.Stack())
-					panic(r)
-				}
-			}()
-
-			err := handler(m)
-			if err != nil {
-				ll.Errorw("Consume message got error", "error", err)
-				return err
-			}
-			ll.Infow("Consume message success")
-			return nil
-		}
-	}
-}
-
 func LoggerHandlerWithCtx() kafka.ConsumeHandlerInterceptorWithCtx {
 	return func(handler kafka.ConsumeMessageHandlerWithCtx) kafka.ConsumeMessageHandlerWithCtx {
 		return func(ctx context.Context, m *kafka.ConsumerMessage) error {

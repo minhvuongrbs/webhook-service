@@ -10,6 +10,11 @@ import (
 	"go.uber.org/zap"
 )
 
+type ConsumerGroupHandlerInterface interface {
+	sarama.ConsumerGroupHandler
+	Close() error
+}
+
 type ConsumeMessageHandlerWithCtx func(ctx context.Context, message *ConsumerMessage) error
 type ConsumeHandlerInterceptorWithCtx func(ConsumeMessageHandlerWithCtx) ConsumeMessageHandlerWithCtx
 

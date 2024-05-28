@@ -9,28 +9,7 @@ import (
 
 	"github.com/minhvuongrbs/webhook-service/pkg/kafka"
 	"github.com/minhvuongrbs/webhook-service/pkg/logging"
-	"go.uber.org/zap"
 )
-
-type DeadLetterQueueRecoveryInterceptor struct {
-	clientID string
-	//deprecated logger
-	logger             *zap.SugaredLogger
-	deadLetterProducer kafka.ProducerWithCtx
-}
-
-func NewDeadLetterQueueRecoveryInterceptor(clientID string, logger *zap.SugaredLogger,
-	deadLetterProducer kafka.ProducerWithCtx) kafka.ConsumeHandlerInterceptor {
-	interceptor := &DeadLetterQueueRecoveryInterceptor{
-		clientID:           clientID,
-		logger:             logger,
-		deadLetterProducer: deadLetterProducer,
-	}
-
-	return func(handler kafka.ConsumeMessageHandler) kafka.ConsumeMessageHandler {
-		return interceptor.ConsumeHandler(handler)
-	}
-}
 
 type DeadLetterQueueRecoveryInterceptorWithCtx struct {
 	clientID           string
@@ -90,28 +69,6 @@ func HandleDeadLetter(ctx context.Context, clientID string, deadLetterProducer k
 		return 0, 0, err
 	}
 	return partition, offset, nil
-}
-
-func (h *DeadLetterQueueRecoveryInterceptor) ConsumeHandler(handler kafka.ConsumeMessageHandler) kafka.ConsumeMessageHandler {
-	return func(msg *kafka.ConsumerMessage) error {
-		defer func() {
-			if r := recover(); r != nil {
-				if msg == nil {
-					h.logger.Errorw("skip recovery nil message", "stack_trace", debug.Stack())
-					return
-				}
-				l := h.logger.With("topic", msg.Topic, "partition", msg.GetPartition(), "offset", msg.GetOffset(), "trace_id", msg.GetTraceID())
-				l.Infow("dead letter recovery msg", "message", msg)
-				partition, offset, err := HandleDeadLetter(context.Background(), h.clientID, h.deadLetterProducer, msg)
-				if err != nil {
-					l.Errorw("cannot recovery message", "error", err, "stack_trace", debug.Stack())
-					panic(r)
-				}
-				l.Infow("recovery message success", "partition", partition, "offset", offset, "stack_trace", debug.Stack())
-			}
-		}()
-		return handler(msg)
-	}
 }
 
 func (h *DeadLetterQueueRecoveryInterceptorWithCtx) ConsumeHandlerWithCtx(handler kafka.ConsumeMessageHandlerWithCtx) kafka.ConsumeMessageHandlerWithCtx {
