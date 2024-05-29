@@ -24,6 +24,12 @@ type Config struct {
 	DeadLetterProducer   pkgfkafka.ProducerConfig   `mapstructure:"dead_letter_producer"`
 	Temporal             temporal.Config            `mapstructure:"temporal"`
 	HttpClient           httpclient.Config          `mapstructure:"http_client"`
+	Monitoring           Monitoring                 `mapstructure:"monitoring"`
+}
+
+type Monitoring struct {
+	KafkaConsumerPrometheusPort  int `mapstructure:"kafka_consumer_prometheus_port"`
+	TemporalWorkerPrometheusPort int `mapstructure:"temporal_worker_prometheus_port"`
 }
 
 func loadDefaultConfig() *Config {

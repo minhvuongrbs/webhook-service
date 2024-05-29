@@ -18,7 +18,7 @@ import (
 )
 
 var (
-	activityNotifyEventToPartner = "activityNotifyEventToPartner"
+	activityNotifyEventToPartner = "ActivityNotifyEventToPartner"
 )
 
 type NotifyEventToPartner struct {
@@ -54,7 +54,7 @@ func (t *NotifyEventToPartner) workflow(ctx workflow.Context, e subscriber.Event
 			InitialInterval:        1 * time.Minute,
 			BackoffCoefficient:     1.5,
 			MaximumInterval:        6 * time.Hour,
-			MaximumAttempts:        30, //0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29
+			MaximumAttempts:        10, //0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 			NonRetryableErrorTypes: []string{},
 		},
 	})

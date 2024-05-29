@@ -2,12 +2,61 @@ package kafka
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/IBM/sarama"
 	"github.com/dnwe/otelsarama"
 	"github.com/pkg/errors"
 	"go.opentelemetry.io/otel"
 )
+
+var ErrCannotSendMessage = fmt.Errorf("cannot send message")
+
+type ProducerConfig struct {
+	Brokers []string `mapstructure:"brokers"`
+	Topic   string   `mapstructure:"topic"`
+
+	// A user-provided string sent with every request to the brokers for logging,
+	// debugging, and auditing purposes. Defaults to "sarama", but you should
+	// probably set it to something specific to your application.
+	ClientID string `mapstructure:"client_id"`
+}
+
+func (c *ProducerConfig) Validate() error {
+	if len(c.Brokers) == 0 {
+		return errors.New("missing brokers")
+	}
+	if len(c.Topic) == 0 {
+		return errors.New("missing topic")
+	}
+	if len(c.ClientID) == 0 {
+		return errors.New("missing client id")
+	}
+	return nil
+}
+
+func DefaultSaramaProducerConfig() *sarama.Config {
+	config := sarama.NewConfig()
+	config.Version = sarama.V1_0_0_0
+	config.ClientID = "flodesk"
+
+	config.Producer.RequiredAcks = sarama.WaitForAll
+	config.Producer.Return.Errors = true
+	config.Producer.Return.Successes = true
+
+	return config
+}
+
+func (c *ProducerConfig) LoadConfig(opts ...ConfigOption) *sarama.Config {
+	saramaConf := DefaultSaramaProducerConfig()
+	if c.ClientID != "" {
+		saramaConf.ClientID = c.ClientID
+	}
+	for _, opt := range opts {
+		opt(saramaConf)
+	}
+	return saramaConf
+}
 
 type ProducerWithCtxHandler func(ctx context.Context, msg *ProducerMessage) (partition int32, offset int64, err error)
 type ProducerWithCtxInterceptor func(h ProducerWithCtxHandler) ProducerWithCtxHandler

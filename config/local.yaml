@@ -46,3 +46,7 @@ temporal:
 
 http_client:
   timeout: 30s
+
+monitoring:
+  kafka_consumer_prometheus_port: 8081
+  temporal_worker_prometheus_port: 8082

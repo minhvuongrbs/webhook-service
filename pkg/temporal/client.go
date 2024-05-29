@@ -5,10 +5,8 @@ import (
 	"crypto/tls"
 	"fmt"
 
-	"github.com/uber-go/tally/v4/prometheus"
 	"go.temporal.io/api/workflowservice/v1"
 	"go.temporal.io/sdk/client"
-	sdktally "go.temporal.io/sdk/contrib/tally"
 	"google.golang.org/protobuf/types/known/durationpb"
 )
 
@@ -27,10 +25,7 @@ func NewTemporalClient(config Config) (client.Client, error) {
 		ConnectionOptions: client.ConnectionOptions{
 			TLS: tlsConfig,
 		},
-		MetricsHandler: sdktally.NewMetricsHandler(newPrometheusScope(prometheus.Configuration{
-			ListenAddress: "0.0.0.0:9090",
-			TimerType:     "histogram",
-		})),
+		MetricsHandler: NewMetricsHandler(),
 	})
 	if err != nil {
 		return nil, fmt.Errorf("setup namespace error: %w", err)

@@ -7,6 +7,7 @@ import (
 	"github.com/minhvuongrbs/webhook-service/internal/ports/temporal_workflow"
 	"github.com/minhvuongrbs/webhook-service/internal/service"
 	"github.com/minhvuongrbs/webhook-service/pkg/logging"
+	"github.com/minhvuongrbs/webhook-service/pkg/metric_server"
 	"github.com/minhvuongrbs/webhook-service/pkg/temporal"
 	"github.com/urfave/cli/v2"
 	"go.temporal.io/sdk/worker"
@@ -24,6 +25,7 @@ func StartTemporalWorkerApp(cmdCLI *cli.Context) error {
 		return err
 	}
 	_ = zap.S()
+	metric_server.StartPromAndHealthHTTPServerNoLocking(conf.Monitoring.TemporalWorkerPrometheusPort)
 
 	temporalWorker, err := temporal.NewTemporalWorker(conf.Temporal, conf.Temporal.TaskQueue)
 	if err != nil {

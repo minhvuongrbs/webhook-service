@@ -4,4 +4,4 @@ global:
 scrape_configs:
   - job_name: 'webhook_notifier'
     static_configs:
-      - targets: ['app:8080']
+      - targets: [ "app:8081",  "app:8082"]

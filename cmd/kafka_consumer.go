@@ -11,6 +11,7 @@ import (
 	"github.com/minhvuongrbs/webhook-service/cmd/kafkaconsumer"
 	"github.com/minhvuongrbs/webhook-service/config"
 	"github.com/minhvuongrbs/webhook-service/pkg/logging"
+	"github.com/minhvuongrbs/webhook-service/pkg/metric_server"
 	"github.com/urfave/cli/v2"
 	"go.uber.org/zap"
 )
@@ -25,8 +26,9 @@ func StartKafkaConsumerCommand(cmdCLI *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	l := zap.S()
+	metric_server.StartPromAndHealthHTTPServerNoLocking(conf.Monitoring.KafkaConsumerPrometheusPort)
 
+	l := zap.S()
 	l.Infow("start kafka consumer", "config", conf)
 	app, err := NewKafkaConsumeApp(conf)
 	if err != nil {
