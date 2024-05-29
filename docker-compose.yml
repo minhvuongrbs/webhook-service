@@ -122,6 +122,34 @@ services:
     depends_on:
       - prometheus
 
+  kafka_consumer:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    command:
+#      - ./webhook_service
+#      - -config=/apps/config/config.yaml
+      - kafka_consumer
+    restart: always
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./files:/app/files
+#
+#  temporal_worker:
+#    build:
+#      dockerfile: Dockerfile
+#      context: .
+#    command:
+#      - ./webhook_service
+#      - -config=/apps/config/config.yaml
+#      - temporal_worker
+#    restart: always
+#    ports:
+#      - "8082:8082"
+#    volumes:
+#      - ./files:/app/files
+
 networks:
   temporal-network:
     driver: bridge
