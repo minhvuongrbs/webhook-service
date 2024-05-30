@@ -127,8 +127,7 @@ services:
       dockerfile: Dockerfile
       context: .
     command:
-#      - ./webhook_service
-#      - -config=/apps/config/config.yaml
+      - ./webhook_service
       - kafka_consumer
     restart: always
     ports:

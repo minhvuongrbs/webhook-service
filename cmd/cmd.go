@@ -19,15 +19,15 @@ func AppCommandLineInterface() *cli.App {
 	}
 	appCli.Commands = []*cli.Command{
 		{
-			Name:   "temporal_worker",
-			Usage:  "run temporal worker",
-			Action: StartTemporalWorkerApp,
-			Flags:  []cli.Flag{},
-		},
-		{
 			Name:   "kafka_consumer",
 			Usage:  "run kafka consumer",
 			Action: StartKafkaConsumerCommand,
+			Flags:  []cli.Flag{},
+		},
+		{
+			Name:   "temporal_worker",
+			Usage:  "run temporal worker",
+			Action: StartTemporalWorkerApp,
 			Flags:  []cli.Flag{},
 		},
 	}
