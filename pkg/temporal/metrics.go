@@ -18,16 +18,16 @@ var (
 	tallyScope            tally.Scope
 )
 
-func NewMetricsHandler() client.MetricsHandler {
+func newMetricsHandler() client.MetricsHandler {
 	return sdktally.NewMetricsHandler(NewPrometheusTallyScope())
 }
 
-//func NewMetricsHandlerV2() client.MetricsHandler {
-//	newPrometheusScope(prometheus.Configuration{
-//		ListenAddress: "0.0.0.0:9090",
-//		TimerType:     "histogram",
-//	})
-//}
+func newMetricsHandlerV2() client.MetricsHandler {
+	return sdktally.NewMetricsHandler(newPrometheusScope(prometheus.Configuration{
+		ListenAddress: "0.0.0.0:9090",
+		TimerType:     "histogram",
+	}))
+}
 
 func NewPrometheusTallyScope() tally.Scope {
 	createTallyScopeMutex.Lock()
