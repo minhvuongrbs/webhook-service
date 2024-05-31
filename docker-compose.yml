@@ -1,12 +1,10 @@
 version: "3.5"
 services:
-  mysql:
+  temporal-mysql:
     container_name: temporal-mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
     image: mysql:${MYSQL_VERSION}
-    networks:
-      - temporal-network
     ports:
       - "3307:3306"
     volumes:
@@ -14,17 +12,15 @@ services:
   temporal:
     container_name: temporal
     depends_on:
-      - mysql
+      - temporal-mysql
     environment:
       - DB=mysql8
       - DB_PORT=3306
       - MYSQL_USER=root
       - MYSQL_PWD=root
-      - MYSQL_SEEDS=mysql
+      - MYSQL_SEEDS=temporal-mysql
 #      - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development-sql.yaml
     image: temporalio/auto-setup:${TEMPORAL_VERSION}
-    networks:
-      - temporal-network
     ports:
       - "7233:7233"
 #    volumes:
@@ -39,8 +35,6 @@ services:
       - TEMPORAL_ADDRESS=temporal:7233
       - TEMPORAL_CLI_ADDRESS=temporal:7233
     image: temporalio/admin-tools:${TEMPORAL_VERSION}
-    networks:
-      - temporal-network
     stdin_open: true
     tty: true
   temporal-ui:
@@ -51,8 +45,6 @@ services:
       - TEMPORAL_ADDRESS=temporal:7233
       - TEMPORAL_CORS_ORIGINS=http://localhost:3000
     image: temporalio/ui:${TEMPORAL_UI_VERSION}
-    networks:
-      - temporal-network
     ports:
       - "8080:8080"
 
@@ -67,12 +59,11 @@ services:
       - MYSQL_PASSWORD=pwd123
     volumes:
       - mysql_data:/var/lib/mysql
-    networks:
-      - service_network
   redis:
     image: redis:${REDIS_VERSION}
     ports:
       - "6379:6379"
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.1
     container_name: zookeeper
@@ -81,19 +72,20 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-
   broker:
     image: confluentinc/cp-kafka:7.0.1
     container_name: broker
     depends_on:
       - zookeeper
+    restart: unless-stopped
     ports:
-#      - "29092:29092"
-      - "9092:9092"
+      - "29092:29092"
+#      - "9092:9092"
 #      - "9101:9101"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
@@ -109,6 +101,8 @@ services:
     container_name: prometheus
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
   grafana:
     image: grafana/grafana
     container_name: grafana
@@ -122,6 +116,7 @@ services:
     depends_on:
       - prometheus
 
+# Application
   kafka_consumer:
     build:
       dockerfile: Dockerfile
@@ -134,27 +129,25 @@ services:
       - "8081:8081"
     volumes:
       - ./files:/app/files
-#
-#  temporal_worker:
-#    build:
-#      dockerfile: Dockerfile
-#      context: .
-#    command:
-#      - ./webhook_service
-#      - -config=/apps/config/config.yaml
-#      - temporal_worker
-#    restart: always
-#    ports:
-#      - "8082:8082"
-#    volumes:
-#      - ./files:/app/files
+    depends_on:
+      - broker
+      - temporal
 
-networks:
-  temporal-network:
-    driver: bridge
-    name: temporal-network
-  service_network:
-    driver: bridge
+  temporal_worker:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    command:
+      - ./webhook_service
+      - temporal_worker
+    restart: always
+    ports:
+      - "8082:8082"
+    volumes:
+      - ./files:/app/files
+    depends_on:
+      - broker
+      - temporal
 
 volumes:
   mysql_data:

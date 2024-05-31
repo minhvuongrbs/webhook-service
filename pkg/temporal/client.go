@@ -25,7 +25,7 @@ func NewTemporalClient(config Config) (client.Client, error) {
 		ConnectionOptions: client.ConnectionOptions{
 			TLS: tlsConfig,
 		},
-		MetricsHandler: NewMetricsHandler(),
+		//MetricsHandler: NewMetricsHandler(),
 	})
 	if err != nil {
 		return nil, fmt.Errorf("setup namespace error: %w", err)
@@ -43,6 +43,7 @@ func NewTemporalClient(config Config) (client.Client, error) {
 		ConnectionOptions: client.ConnectionOptions{
 			TLS: tlsConfig,
 		},
+		MetricsHandler: NewMetricsHandler(),
 	})
 	if err != nil {
 		return nil, err
