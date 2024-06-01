@@ -19,10 +19,12 @@ services:
       - MYSQL_USER=root
       - MYSQL_PWD=root
       - MYSQL_SEEDS=temporal-mysql
+      - PROMETHEUS_ENDPOINT=0.0.0.0:8000 #expose a port for Prometheus
 #      - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development-sql.yaml
     image: temporalio/auto-setup:${TEMPORAL_VERSION}
     ports:
       - "7233:7233"
+      - "8000:8000"
 #    volumes:
 #      - ./dynamicconfig:/etc/temporal/config/dynamicconfig
     labels:
