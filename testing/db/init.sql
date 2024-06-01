@@ -1,3 +1,17 @@
+-- create database
+CREATE DATABASE webhook;
+-- create table webhook
+CREATE TABLE webhook
+(
+    id         VARCHAR(36) PRIMARY KEY,
+    status     ENUM ('active', 'inactive') NOT NULL DEFAULT 'active',
+    partner_id VARCHAR(36)                 NOT NULL,
+    metadata   JSON                        NOT NULL DEFAULT (JSON_OBJECT()) COMMENT 'metadata of webhook: name, post_url,...',
+    created_at TIMESTAMP                   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP                   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Add 20 mocks records
 INSERT INTO webhook.webhook (id, status, partner_id, metadata, created_at, updated_at) VALUES
 ('c84gk48qvh2l9t5dzp3f', 'active', 'cpaa1fg4uq1ne39r9p21', '{"name": "webhook name1", "events": ["subscriber.created", "subscriber.subscribed"], "post_url": "https://webhook.site/1e15250a-d7fb-4aef-a19a-0476c74ce911"}', '2024-05-27 15:04:36', '2024-05-27 15:04:36'),
 ('b17t5g83ch2m6a4hjb9e', 'active', 'cpaa1fg4uq1ne39r9p22', '{"name": "webhook name2", "events": ["subscriber.unsubscribed"], "post_url": "https://webhook.site/2e15250a-d7fb-4aef-a19a-0476c74ce912"}', '2024-05-27 15:05:36', '2024-05-27 15:05:36'),
