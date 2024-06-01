@@ -21,13 +21,13 @@ func AppCommandLineInterface() *cli.App {
 		{
 			Name:   "kafka_consumer",
 			Usage:  "run kafka consumer",
-			Action: StartKafkaConsumerCommand,
+			Action: startKafkaConsumer,
 			Flags:  []cli.Flag{},
 		},
 		{
 			Name:   "temporal_worker",
 			Usage:  "run temporal worker",
-			Action: StartTemporalWorkerApp,
+			Action: startTemporalWorker,
 			Flags:  []cli.Flag{},
 		},
 	}

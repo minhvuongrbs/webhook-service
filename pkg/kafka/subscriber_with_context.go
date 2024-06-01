@@ -163,13 +163,13 @@ func (s *SubscriberGroupWithCtx) Consume(ctx context.Context, handler ConsumeMes
 		if err = group.Consume(ctx, []string{s.config.Topic}, consumer); err != nil {
 			if errors.Is(err, sarama.ErrUnknown) {
 				// this is info, because it is often just noise
-				l.Warnw("group.Consume Received unknown Sarama error, %v", err)
+				l.Warnw("group.consume Received unknown Sarama error, %v", err)
 				continue
 			}
-			l.Errorf("group.Consume Group consume error, %v", err)
+			l.Errorf("group.consume Group consume error, %v", err)
 			continue
 		}
-		l.Infow("group.Consume Consumer group done without error")
+		l.Infow("group.consume Consumer group done without error")
 	}
 }
 

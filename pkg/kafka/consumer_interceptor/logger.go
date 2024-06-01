@@ -15,20 +15,20 @@ func LoggerHandlerWithCtx() kafka.ConsumeHandlerInterceptorWithCtx {
 		return func(ctx context.Context, m *kafka.ConsumerMessage) error {
 			ll := logging.FromContext(ctx)
 
-			ll.Infow("Consume message")
+			ll.Infow("consume message")
 			defer func() {
 				if r := recover(); r != nil {
-					ll.Errorw("Consume message got panic", "stack_trace", debug.Stack())
+					ll.Errorw("consume message got panic", "stack_trace", debug.Stack())
 					panic(r)
 				}
 			}()
 
 			err := handler(ctx, m)
 			if err != nil {
-				ll.Errorw("Consume message got error", "error", err)
+				ll.Errorw("consume message got error", "error", err)
 				return err
 			}
-			ll.Infow("Consume message success")
+			ll.Infow("consume message success")
 			return nil
 		}
 	}

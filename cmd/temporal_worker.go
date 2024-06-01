@@ -14,7 +14,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func StartTemporalWorkerApp(cmdCLI *cli.Context) error {
+func startTemporalWorker(cmdCLI *cli.Context) error {
 	confPath := cmdCLI.String("config")
 	conf, err := config.LoadConfig(confPath)
 	if err != nil {

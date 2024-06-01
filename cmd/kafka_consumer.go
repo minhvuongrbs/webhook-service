@@ -3,20 +3,18 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
-	"os/signal"
-	"sync"
-	"syscall"
 
-	"github.com/minhvuongrbs/webhook-service/cmd/kafkaconsumer"
 	"github.com/minhvuongrbs/webhook-service/config"
+	"github.com/minhvuongrbs/webhook-service/internal/ports/kafka_consumer"
+	"github.com/minhvuongrbs/webhook-service/internal/service"
 	"github.com/minhvuongrbs/webhook-service/pkg/logging"
 	"github.com/minhvuongrbs/webhook-service/pkg/metric_server"
+	"github.com/minhvuongrbs/webhook-service/pkg/pubsub"
 	"github.com/urfave/cli/v2"
 	"go.uber.org/zap"
 )
 
-func StartKafkaConsumerCommand(cmdCLI *cli.Context) error {
+func startKafkaConsumer(cmdCLI *cli.Context) error {
 	confPath := cmdCLI.String("config")
 	conf, err := config.LoadConfig(confPath)
 	if err != nil {
@@ -30,7 +28,13 @@ func StartKafkaConsumerCommand(cmdCLI *cli.Context) error {
 
 	l := zap.S()
 	l.Infow("start kafka consumer", "config", conf)
-	app, err := NewKafkaConsumeApp(conf)
+
+	subscriberEventConsumer, err := newSubscriberEventConsumer(conf)
+	if err != nil {
+		return fmt.Errorf("cannot create kafka consumer event consumer: %w", err)
+	}
+
+	app, err := pubsub.NewKafkaConsumeApp(subscriberEventConsumer)
 	if err != nil {
 		l.Errorw("cannot create kafka consumer app", "error", err)
 		return err
@@ -43,54 +47,26 @@ func StartKafkaConsumerCommand(cmdCLI *cli.Context) error {
 	return nil
 }
 
-func NewKafkaConsumeApp(conf config.Config) (*KafkaConsumeApp, error) {
-	eventConsumer, err := kafkaconsumer.NewSubscriberEventConsumer(conf)
+const (
+	defaultMaxRetries = 3
+)
+
+func newSubscriberEventConsumer(conf config.Config) (*pubsub.KafkaConsumer, error) {
+	kafkaSubscriberConf := pubsub.KafkaSubscriberConfig{
+		SubscribeConfig:          conf.KafkaSubscriberEvent,
+		DeadLetterProducerConfig: conf.DeadLetterProducer,
+		MaxRetries:               defaultMaxRetries,
+	}
+
+	app, err := service.NewApplication(conf)
 	if err != nil {
-		return nil, fmt.Errorf("cannot create kafka consumer event consumer: %w", err)
+		return nil, fmt.Errorf("create kafka application got error: %w", err)
 	}
-	kafkaConsumers := []*kafkaconsumer.KafkaConsumer{eventConsumer}
-	return &KafkaConsumeApp{
-		wg:        &sync.WaitGroup{},
-		consumers: kafkaConsumers,
-	}, nil
-}
-
-type KafkaConsumeApp struct {
-	wg *sync.WaitGroup
-
-	consumers []*kafkaconsumer.KafkaConsumer
-}
-
-func (k *KafkaConsumeApp) StartConsume(ctx context.Context) error {
-	errChannel := make(chan error)
-	for _, c := range k.consumers {
-		go func(c2 *kafkaconsumer.KafkaConsumer) {
-			k.wg.Add(1)
-			defer k.wg.Done()
-			err := c2.Consume(context.Background())
-			if err != nil {
-				errChannel <- fmt.Errorf("cannot start kafka consumer: %w", err)
-				return
-			}
-		}(c)
+	consumeSubscriberEventHandler := kafka_consumer.NewConsumeSubscriberEvent(app)
+	kafkaConsumer, err := pubsub.NewKafkaConsumer(kafkaSubscriberConf, consumeSubscriberEventHandler.Handle)
+	if err != nil {
+		return nil, fmt.Errorf("create kafka consumer got error: %w", err)
 	}
 
-	osKillSignal := make(chan os.Signal, 1)
-	var err error
-	go func() {
-		err = <-errChannel
-		if err != nil {
-			zap.S().Errorw("start kafka consumer got error", "error", err)
-			osKillSignal <- os.Kill
-		}
-	}()
-	go func() {
-		<-ctx.Done()
-		osKillSignal <- os.Kill
-	}()
-	zap.S().Infow("start kafka consumer successfully")
-	signal.Notify(osKillSignal, os.Interrupt, os.Kill, syscall.SIGTERM)
-	<-osKillSignal
-	zap.S().Infow("kafka consumer is shutting down", "error", err)
-	return err
+	return kafkaConsumer, nil
 }

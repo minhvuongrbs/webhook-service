@@ -54,7 +54,7 @@ func (c *ConsumerGroupHandlerWithCtx) ConsumeClaim(sess sarama.ConsumerGroupSess
 	defer c.wg.Done()
 	kafkaMessages := claim.Messages()
 	logger := c.logger.With("topic", claim.Topic(), "partition", claim.Partition())
-	logger.Infow("Consume claimed", "initial_offset", claim.InitialOffset())
+	logger.Infow("consume claimed", "initial_offset", claim.InitialOffset())
 	for {
 		select {
 		case kafkaMsg, ok := <-kafkaMessages:

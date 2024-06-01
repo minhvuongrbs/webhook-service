@@ -82,7 +82,7 @@ services:
     restart: unless-stopped
     ports:
       - "29092:29092"
-#      - "9092:9092"
+      - "9092:9092"
 #      - "9101:9101"
     environment:
       KAFKA_BROKER_ID: 1
@@ -150,6 +150,12 @@ services:
     depends_on:
       - broker
       - temporal
+
+  xk6:
+    image: mostafamoradian/xk6-kafka:latest
+    command: run --vus 10 --duration 2s /testing/kafka_test.js
+    volumes:
+      - ./testing/kafka_test.js:/testing/kafka_test.js
 
 volumes:
   mysql_data:

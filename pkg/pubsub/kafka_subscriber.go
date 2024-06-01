@@ -15,12 +15,12 @@ type KafkaSubscriberConfig struct {
 	MaxRetries               int                    `mapstructure:"max_retries"`
 }
 
-func NewKafkaSubscriber(cfg *KafkaSubscriberConfig) (kafka.SubscriberWithCtx, error) {
-	deadLetterProducer, err := NewKafkaProducer(cfg.DeadLetterProducerConfig)
+func NewKafkaSubscriber(conf KafkaSubscriberConfig) (kafka.SubscriberWithCtx, error) {
+	deadLetterProducer, err := NewKafkaProducer(conf.DeadLetterProducerConfig)
 	if err != nil {
 		return nil, fmt.Errorf("cannot create kafka dead letter producer: %w", err)
 	}
-	subConf := cfg.SubscribeConfig
+	subConf := conf.SubscribeConfig
 
 	retryProducer, err := NewKafkaProducer(kafka.ProducerConfig{
 		Brokers:  subConf.Brokers,
@@ -34,7 +34,7 @@ func NewKafkaSubscriber(cfg *KafkaSubscriberConfig) (kafka.SubscriberWithCtx, er
 		subConf.ClientID,
 		retryProducer,
 		deadLetterProducer,
-		cfg.MaxRetries,
+		conf.MaxRetries,
 	)
 	deadLetterInterceptor := consumer_interceptor.NewDeadLetterQueueRecoveryInterceptorWithCtx(
 		subConf.ClientID,

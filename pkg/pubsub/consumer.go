@@ -1,7 +1,8 @@
-package kafkaconsumer
+package pubsub
 
 import (
 	"context"
+	"fmt"
 	"sync"
 
 	"github.com/minhvuongrbs/webhook-service/pkg/kafka"
@@ -15,14 +16,20 @@ type KafkaConsumer struct {
 	subscribe kafka.SubscriberWithCtx
 }
 
-func NewKafkaConsumer(subscriber kafka.SubscriberWithCtx, handler kafka.ConsumeMessageHandlerWithCtx) *KafkaConsumer {
-	return &KafkaConsumer{
-		subscribe: subscriber,
-		handler:   handler,
+func NewKafkaConsumer(conf KafkaSubscriberConfig,
+	handler kafka.ConsumeMessageHandlerWithCtx) (*KafkaConsumer, error) {
+	kafkaSubscriber, err := NewKafkaSubscriber(conf)
+	if err != nil {
+		return nil, fmt.Errorf("create kafka subscribe got error: %w", err)
 	}
+	
+	return &KafkaConsumer{
+		subscribe: kafkaSubscriber,
+		handler:   handler,
+	}, nil
 }
 
-func (c *KafkaConsumer) Consume(ctx context.Context) error {
+func (c *KafkaConsumer) consume(ctx context.Context) error {
 	ctx, cancel := context.WithCancel(ctx)
 	c.stopConsumerFunc = cancel
 	c.wg.Add(1)
@@ -31,7 +38,7 @@ func (c *KafkaConsumer) Consume(ctx context.Context) error {
 	return c.subscribe.Consume(ctx, c.handler)
 }
 
-func (c *KafkaConsumer) StopConsume() {
+func (c *KafkaConsumer) stopConsume() {
 	if c.stopConsumerFunc != nil {
 		c.stopConsumerFunc()
 	}

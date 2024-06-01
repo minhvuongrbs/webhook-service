@@ -13,7 +13,7 @@ func SkipPanicLetterWithCtx(l *zap.SugaredLogger) kafka.ConsumeHandlerIntercepto
 		return func(ctx context.Context, m *kafka.ConsumerMessage) error {
 			defer func() {
 				if r := recover(); r != nil {
-					l.Errorw("Consume message got panic", "m", m, "error", r, "stack", string(debug.Stack()))
+					l.Errorw("consume message got panic", "m", m, "error", r, "stack", string(debug.Stack()))
 				}
 			}()
 
