@@ -26,7 +26,14 @@ func NewApplication(conf config.Config) (app.App, error) {
 	//httpClient := http.Client{Timeout: conf.HttpClient.Timeout, Transport: httpClientTP}
 	httpClient := http.Client{Timeout: conf.HttpClient.Timeout}
 
-	partnerAdapter := partner.NewAdapter(httpClient)
+	var partnerAdapter app.PartnerAdapter
+	if config.IsLoadTestEnv(conf.Env) {
+		fmt.Println("system is running under loadtest environment")
+		partnerAdapter = partner.NewLoadTestAdapter()
+	} else {
+		partnerAdapter = partner.NewAdapter(httpClient)
+	}
+
 	temporalClient, err := pkgtemporal.NewTemporalClient(conf.Temporal)
 	if err != nil {
 		return app.App{}, fmt.Errorf("failed to create temporal client: %w", err)

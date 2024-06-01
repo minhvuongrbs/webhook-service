@@ -74,3 +74,7 @@ func LoadConfig(configPath string) (Config, error) {
 	}
 	return *c, err
 }
+
+func IsLoadTestEnv(env string) bool {
+	return env == "loadtest"
+}

@@ -46,8 +46,10 @@ Prometheus and Grafana are integrated to provide comprehensive monitoring and vi
 - **Temporal Admin Tool**: Accessible via [http://localhost:8080/](http://localhost:8080/)
 
 ### Load Test
+- Update property env in config/local.yaml to run system under load testing option
 - Running command in docker compose file to trigger producing 100 Kafka messages or more with configurable
 service name: **produce_batch_kafka_messages**
+- Currently each trigger action will produce 1000 messages to Kafka(also notify to partner). Event send to partner will be randomly processing between 
 
 
  

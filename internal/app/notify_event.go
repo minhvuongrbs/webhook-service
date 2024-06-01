@@ -10,11 +10,11 @@ import (
 )
 
 type NotifyEventHandler struct {
-	partnerAdapter    partnerAdapter
+	partnerAdapter    PartnerAdapter
 	webhookRepository webhookRepository
 }
 
-type partnerAdapter interface {
+type PartnerAdapter interface {
 	NotifyWebhookEvent(ctx context.Context, w *webhook.Webhook, subscriberEvent subscriber.Event) error
 }
 
@@ -22,7 +22,7 @@ type webhookRepository interface {
 	GetWebhookById(ctx context.Context, webhookId string) (*webhook.Webhook, error)
 }
 
-func NewNotifyEventHandler(webhookRepository webhookRepository, partnerAdapter partnerAdapter) NotifyEventHandler {
+func NewNotifyEventHandler(webhookRepository webhookRepository, partnerAdapter PartnerAdapter) NotifyEventHandler {
 	return NotifyEventHandler{
 		webhookRepository: webhookRepository,
 		partnerAdapter:    partnerAdapter,
