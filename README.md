@@ -2,7 +2,8 @@
 Handling webhook and notify to partner the corresponding events
 
 ## Documentation
-Finding documentation in folder: ./docs
+![Webhook Notifier](./docs/diagram/webhook_notifier.png)
+
 
 ## Technical Stack
 Programming Language: Golang\
@@ -31,4 +32,22 @@ Message Broker: Kafka\
 ```bash
 make docker-compose-up
 ```
+
+## Characteristics
+This system is designed with the following characteristics:
+- **Reliability**: Utilizing Temporal for handling failures and ensuring recoverability.
+- **Scalability**: Capable of handling increased workload by adding more application instances.
+
+## Monitoring
+Prometheus and Grafana are integrated to provide comprehensive monitoring and visualization of the system's performance and latency metrics.
+
+### Accessing Monitoring Tools
+- **Grafana**: Available at [http://localhost:3000/](http://localhost:3000/)
+- **Temporal Admin Tool**: Accessible via [http://localhost:8080/](http://localhost:8080/)
+
+### Load Test
+- Running command in docker compose file to trigger producing 100 Kafka messages or more with configurable
+service name: **produce_batch_kafka_messages**
+
+
  

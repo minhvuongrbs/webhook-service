@@ -151,11 +151,13 @@ services:
       - broker
       - temporal
 
-  xk6:
+  produce_batch_kafka_messages:
     image: mostafamoradian/xk6-kafka:latest
     command: run --vus 1 --iterations 1 --duration 2s /testing/kafka_test.js
     volumes:
       - ./testing/kafka_test.js:/testing/kafka_test.js
+    depends_on:
+      - broker
 
 volumes:
   mysql_data:
