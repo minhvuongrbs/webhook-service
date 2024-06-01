@@ -18,5 +18,38 @@
   {"event_name": "subscriber.created", "webhook_id": "cp7lrs04uq1tockiom9s"},
   {"event_name": "subscriber.unsubscribed", "webhook_id": "cp6crs04uq1tockiom9j"},
   {"event_name": "subscriber.created", "webhook_id": "cp8ars04uq1tockiom9h"},
-  {"event_name": "subscriber.subscribed", "webhook_id": "cp9jrs04uq1tockiom9q"}
+  {
+    "event_name": "subscriber.subscribed",
+    "event_time": "2024-05-28T12:45:00.123Z",
+    "subscriber": {
+      "id": "sub123456",
+      "status": "subscribed",
+      "email": "example@example.com",
+      "source": "email_campaign",
+      "first_name": "John",
+      "last_name": "Doe",
+      "segments": [
+        {
+          "id": "seg001",
+          "name": "New Subscribers"
+        },
+        {
+          "id": "seg003",
+          "name": "Promotions"
+        }
+      ],
+      "custom_fields": {
+        "property1": "custom_value1",
+        "property2": "custom_value2"
+      },
+      "optin_ip": "192.168.1.1",
+      "optin_timestamp": "2024-05-28T12:30:00.123Z",
+      "created_at": "2024-05-28T12:00:00.123Z"
+    },
+    "segment": {
+      "id": "seg003",
+      "name": "Promotions"
+    },
+    "webhook_id": "cp1hrs04uq1tockiom9o"
+  }
 ]

@@ -25,7 +25,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 9,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -156,7 +156,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -254,7 +254,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -352,7 +352,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -451,7 +451,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -602,7 +602,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -721,10 +721,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -808,7 +805,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "builder",
+          "editorMode": "code",
           "expr": "",
           "instant": false,
           "legendFormat": "__auto",
@@ -822,7 +819,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -955,7 +952,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -1056,7 +1053,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -1155,7 +1152,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -1254,7 +1251,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -1353,7 +1350,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -1452,7 +1449,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -1551,7 +1548,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -1650,7 +1647,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -1750,7 +1747,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -1912,7 +1909,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -2049,10 +2046,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2136,7 +2130,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "builder",
+          "editorMode": "code",
           "expr": "sum by (namespace) (rate(workflow_success{ operation=\"CompletionStats\"}[5m]))",
           "interval": "",
           "legendFormat": "{{ namespace }} ",
@@ -2148,10 +2142,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2235,7 +2226,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": "sum by (namespace) (rate(workflow_failed{ operation=\"CompletionStats\"}[5m]))",
           "interval": "",
           "legendFormat": "{{ namespace }} ",
@@ -2247,10 +2238,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2334,7 +2322,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": "sum by (namespace) (rate(workflow_timeout{ operation=\"CompletionStats\"}[5m]))",
           "interval": "",
           "legendFormat": "{{ namespace }} ",
@@ -2346,10 +2334,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2433,7 +2418,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": "sum by (namespace) (rate(workflow_terminate{ operation=\"CompletionStats\"}[5m]))",
           "interval": "",
           "legendFormat": "{{ namespace }} ",
@@ -2445,10 +2430,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2532,7 +2514,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": "sum by (namespace) (rate(workflow_cancel{ operation=\"CompletionStats\"}[5m]))",
           "interval": "",
           "legendFormat": "{{ namespace }} ",
@@ -2570,10 +2552,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2657,7 +2636,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": "sum (rate(service_requests[5m]))",
           "interval": "",
           "legendFormat": "requests",
@@ -2679,10 +2658,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2766,7 +2742,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": "sum by (operation) (rate(service_requests[5m]))",
           "interval": "",
           "legendFormat": "{{operation}}",
@@ -2780,7 +2756,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -2911,10 +2887,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2998,7 +2971,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": "sum by (operation) (rate(service_errors[5m]))",
           "interval": "",
           "legendFormat": "",
@@ -3010,10 +2983,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3097,7 +3067,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": "histogram_quantile(0.95, sum(rate(service_latency_bucket{operation!~\"^Poll.+\"}[5m])) by (operation, le))",
           "interval": "",
           "legendFormat": "{{operation}}",
@@ -3135,10 +3105,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3222,7 +3189,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": "sum (rate(persistence_requests[5m]) OR on() vector(0))",
           "interval": "",
           "legendFormat": "requests",
@@ -3244,10 +3211,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3331,7 +3295,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": " sum by (operation) (rate(persistence_requests[5m]))",
           "interval": "",
           "legendFormat": "{{operation}}",
@@ -3343,10 +3307,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3430,7 +3391,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": "sum by (operation) (rate(persistence_errors[5m]))",
           "interval": "",
           "legendFormat": "",
@@ -3442,10 +3403,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3529,7 +3487,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "exemplar": true,
           "expr": "histogram_quantile(0.95, sum(rate(persistence_latency_bucket[1m])) by (operation, le))",
           "interval": "",
@@ -3568,10 +3526,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3655,7 +3610,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": "sum(rate(client_requests[5m]))",
           "interval": "",
           "legendFormat": "requests",
@@ -3677,10 +3632,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3764,7 +3716,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": "sum by (operation) (rate(client_requests[5m]))",
           "interval": "",
           "legendFormat": "{{operation}}",
@@ -3776,10 +3728,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3863,7 +3812,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": "sum by (operation) (rate(client_errors[5m]))",
           "interval": "",
           "legendFormat": "{{operation}}",
@@ -3875,10 +3824,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3962,7 +3908,7 @@
             "type": "prometheus",
             "uid": "${Env}"
           },
-          "editorMode": "code",
+          "editorMode": "builder",
           "expr": "histogram_quantile(0.95, sum(rate(client_latency_bucket[5m])) by (operation, le))",
           "interval": "",
           "legendFormat": "{{operation}}",
@@ -3982,7 +3928,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -4024,7 +3970,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -4081,6 +4027,6 @@
   "timezone": "",
   "title": "Custom Temporal Server Metrics",
   "uid": "465DLuU4z",
-  "version": 4,
+  "version": 3,
   "weekStart": ""
 }

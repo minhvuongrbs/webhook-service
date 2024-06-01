@@ -19,7 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 6,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -51,7 +51,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -154,7 +154,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -257,7 +257,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -360,7 +360,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -489,7 +489,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -618,7 +618,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -721,7 +721,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "edna4tgrk7wg0c"
+        "uid": "ddnh3zzxnwy68a"
       },
       "fieldConfig": {
         "defaults": {
@@ -924,6 +924,6 @@
   "timezone": "",
   "title": "Kafka Overview",
   "uid": "SscHCoc4k",
-  "version": 9,
+  "version": 3,
   "weekStart": ""
 }
