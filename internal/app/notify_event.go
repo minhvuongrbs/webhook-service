@@ -37,6 +37,7 @@ func (h NotifyEventHandler) Execute(ctx context.Context, e subscriber.Event) err
 	if err != nil {
 		return fmt.Errorf("get event webhook: %w", err)
 	}
+	// TODO: if event not in registered list => skip notify
 	err = h.partnerAdapter.NotifyWebhookEvent(ctx, w, e)
 	if err != nil {
 		return fmt.Errorf("partner notify event failed: %w", err)

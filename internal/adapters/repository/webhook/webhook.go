@@ -19,6 +19,8 @@ func NewWebhookRepository(db *sql.DB) Repository {
 	return Repository{db: db}
 }
 
+// GetWebhookById get a webhook from database and cache
+// TODO: Define caching for webhook information
 func (r Repository) GetWebhookById(ctx context.Context, webhookId string) (*webhook.Webhook, error) {
 	q := da_generated.New(r.db)
 	w, err := q.GetWebhookById(ctx, webhookId)
