@@ -18,7 +18,7 @@ func NewApplication(conf config.Config) (app.App, error) {
 	if err != nil {
 		return app.App{}, fmt.Errorf("failed to connect database: %w", err)
 	}
-	webhookRepo := webhook.NewWebhookRepository(db)
+	webhookRepo := webhook.NewRepository(db)
 
 	// todo: using round tripper
 	// it's somehow cause http post request error

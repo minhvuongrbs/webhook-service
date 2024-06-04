@@ -3,9 +3,11 @@ module github.com/minhvuongrbs/webhook-service
 go 1.21.5
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/IBM/sarama v1.43.2
 	github.com/dnwe/otelsarama v0.0.0-20240308230250-9388d9d40bc0
 	github.com/go-sql-driver/mysql v1.8.1
+	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.6.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/pkg/errors v0.9.1
@@ -14,6 +16,7 @@ require (
 	github.com/rs/xid v1.5.0
 	github.com/spf13/cast v1.6.0
 	github.com/spf13/viper v1.18.2
+	github.com/stretchr/testify v1.9.0
 	github.com/uber-go/tally/v4 v4.1.1
 	github.com/urfave/cli/v2 v2.27.2
 	go.opentelemetry.io/otel v1.26.0
@@ -40,7 +43,6 @@ require (
 	github.com/go-logr/logr v1.4.1 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1 // indirect
@@ -72,7 +74,6 @@ require (
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
-	github.com/stretchr/testify v1.9.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/twmb/murmur3 v1.1.5 // indirect
 	github.com/xrash/smetrics v0.0.0-20240312152122-5f08fbb34913 // indirect
