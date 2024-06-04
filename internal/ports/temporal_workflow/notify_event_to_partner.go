@@ -2,13 +2,11 @@ package temporal_workflow
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"time"
 
 	"github.com/minhvuongrbs/webhook-service/internal/app"
 	"github.com/minhvuongrbs/webhook-service/internal/entities/subscriber"
-	"github.com/minhvuongrbs/webhook-service/internal/entities/webhook"
 	"github.com/minhvuongrbs/webhook-service/pkg/logging"
 	"go.temporal.io/sdk/activity"
 	"go.temporal.io/sdk/temporal"
@@ -72,9 +70,6 @@ func (t *NotifyEventToPartner) activity(ctx context.Context, e subscriber.Event)
 	logger.Info("activity started")
 
 	err := t.app.NotifyEventHandler.Execute(ctx, e)
-	if errors.Is(err, webhook.ErrRepositoryNotFound) {
-		return temporal.NewNonRetryableApplicationError("webhook not found", "webhookRepository", err)
-	}
 	if err != nil {
 		handlerErr := fmt.Errorf("notify event to partner failed: %w", err)
 		return handlerErr

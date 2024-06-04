@@ -41,7 +41,7 @@ func NewApplication(conf config.Config) (app.App, error) {
 	temporalAdapter := temporal.NewAdapter(temporalClient, conf.Temporal.TaskQueue)
 
 	return app.App{
-		RegisterNotifyEventHandler: app.NewRegisterNotifyEventHandler(temporalAdapter),
+		RegisterNotifyEventHandler: app.NewRegisterNotifyEventHandler(temporalAdapter, webhookRepo),
 		NotifyEventHandler:         app.NewNotifyEventHandler(webhookRepo, partnerAdapter),
 	}, nil
 }

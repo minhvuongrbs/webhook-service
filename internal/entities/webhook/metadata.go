@@ -1,12 +1,14 @@
 package webhook
 
-type SubscriberEventName string
+import "github.com/minhvuongrbs/webhook-service/internal/entities/subscriber"
 
-const (
-	SubscriberCreated      = SubscriberEventName("subscriber.created")
-	SubscriberSubscribed   = SubscriberEventName("subscriber.subscribed")
-	SubscriberUnsubscribed = SubscriberEventName("subscriber.unsubscribed")
-)
+//type SubscriberEventName string
+//
+//const (
+//	SubscriberCreated      = SubscriberEventName("subscriber.created")
+//	SubscriberSubscribed   = SubscriberEventName("subscriber.subscribed")
+//	SubscriberUnsubscribed = SubscriberEventName("subscriber.unsubscribed")
+//)
 
 // Metadata
 /* Example:
@@ -18,9 +20,9 @@ const (
 */
 
 type Metadata struct {
-	Name    string                `json:"name"`
-	PostUrl string                `json:"post_url"`
-	Events  []SubscriberEventName `json:"events"`
+	Name    string                 `json:"name"`
+	PostUrl string                 `json:"post_url"`
+	Events  []subscriber.EventName `json:"events"`
 }
 
 func (m Metadata) GetPostUrl() string {

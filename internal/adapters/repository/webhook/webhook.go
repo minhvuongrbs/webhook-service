@@ -38,9 +38,20 @@ func (r Repository) GetWebhookById(ctx context.Context, webhookId string) (*webh
 	}
 	return &webhook.Webhook{
 		Id:        w.ID,
+		Status:    toEntityStatus(w.Status),
 		PartnerId: w.PartnerID,
 		Metadata:  md,
 		CreatedAt: w.CreatedAt,
 		UpdatedAt: w.UpdatedAt,
 	}, nil
+}
+
+func toEntityStatus(s da_generated.WebhookStatus) webhook.Status {
+	switch s {
+	case da_generated.WebhookStatusActive:
+		return webhook.StatusActive
+	case da_generated.WebhookStatusInactive:
+		return webhook.StatusInactive
+	}
+	return webhook.StatusInactive
 }
