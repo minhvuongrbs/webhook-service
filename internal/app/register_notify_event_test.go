@@ -1,4 +1,4 @@
-package app
+package app_test
 
 import (
 	"context"
@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/golang/mock/gomock"
+	. "github.com/minhvuongrbs/webhook-service/internal/app"
 	"github.com/minhvuongrbs/webhook-service/internal/entities/subscriber"
 	"github.com/minhvuongrbs/webhook-service/internal/entities/webhook"
 	"github.com/stretchr/testify/assert"
