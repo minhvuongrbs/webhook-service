@@ -12,7 +12,12 @@ import (
 )
 
 type Adapter struct {
-	httpClient http.Client
+	httpClient  http.Client
+	rateLimiter rateLimiter
+}
+
+type rateLimiter interface {
+	Validate(limitType string, maxRate int64) (isExceed bool, err error)
 }
 
 func NewAdapter(httpClient http.Client) Adapter {
@@ -25,7 +30,15 @@ const (
 	contentTypeJSON = "application/json"
 )
 
+// NotifyWebhookEvent
+// TODO: rate limit maximum
 func (a Adapter) NotifyWebhookEvent(ctx context.Context, w *webhook.Webhook, event subscriber.Event) error {
+	//rateLimitEvent := fmt.Sprintf("max_partner_limit:%s", w.PartnerId)
+	//isExceed, err := a.rateLimiter.Validate(rateLimitEvent, w.Metadata.MaximumRequestPerTime)
+	//if err != nil || isExceed {
+	//	return err
+	//}
+
 	jsonBody, err := json.Marshal(event)
 	if err != nil {
 		return fmt.Errorf("could not marshal webhook event: %w", err)

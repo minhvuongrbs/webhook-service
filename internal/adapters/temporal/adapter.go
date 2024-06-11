@@ -21,6 +21,7 @@ func NewAdapter(temporalClient client.Client, taskQueue string) Adapter {
 }
 
 func (a Adapter) RegisterWorkflowNotifyEvent(ctx context.Context, e subscriber.Event) error {
+	// TODO: register with delay if rate limit
 	workflowID := fmt.Sprintf("webhook.notify_event:%s.%s", e.EventName, e.WebhookId)
 
 	wlOpts := client.StartWorkflowOptions{
